@@ -14,6 +14,7 @@ Lost Places Explorer is a fullstack web application designed to help users disco
 - **Tag Filtering**: Filter the displayed OSM places by common tags (e.g., Industrial, Railway, Military).
 - **Country Selector**: Easily jump to a specific country using a dropdown menu.
 - **Location Details**: Click on any marker to see more details, including name, coordinates, and a link to its OpenStreetMap page.
+- **Mobile Friendly (PWA)**: The application is a Progressive Web App, meaning you can "install" it on your phone's home screen for easy access and a native app-like experience. It also works offline!
 
 ## 📦 Tech Stack
 
