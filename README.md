@@ -12,6 +12,7 @@ Lost Places Explorer is a fullstack web application designed to help users disco
 - **Distinct Markers**: OSM data (blue markers) and user-submitted places (green markers) are visually distinct.
 - **Layer Control**: Switch between "Street" and "Satellite" map views. Toggle OSM and user-submitted data layers on and off.
 - **Tag Filtering**: Filter the displayed OSM places by common tags (e.g., Industrial, Railway, Military).
+- **Country Selector**: Easily jump to a specific country using a dropdown menu.
 - **Location Details**: Click on any marker to see more details, including name, coordinates, and a link to its OpenStreetMap page.
 
 ## 📦 Tech Stack

@@ -146,26 +146,43 @@ function fetchAbandonedPlaces() {
         });
 }
 
-// --- Event Listeners ---
+// --- Event Listeners and Initializers ---
+document.addEventListener('DOMContentLoaded', () => {
+    // Populate country dropdown
+    const countryFilter = document.getElementById('country-filter');
+    countries.sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
+    countries.forEach(country => {
+        const option = document.createElement('option');
+        option.value = `${country.lat},${country.lon}`;
+        option.textContent = country.name;
+        countryFilter.appendChild(option);
+    });
 
-// Fetch data when the map is moved or zoomed
-map.on('moveend', fetchAbandonedPlaces);
+    // Handle country selection
+    countryFilter.addEventListener('change', (event) => {
+        const value = event.target.value;
+        if (value !== 'default') {
+            const [lat, lon] = value.split(',');
+            map.setView([lat, lon], 6); // Zoom to a reasonable level
+        }
+    });
 
-// Handle filter change
-const filterElement = document.getElementById('tag-filter');
-filterElement.addEventListener('change', (event) => {
-    renderOsmMarkers(event.target.value);
-});
+    // Fetch data when the map is moved or zoomed
+    map.on('moveend', fetchAbandonedPlaces);
 
+    // Handle tag filter change
+    const tagFilterElement = document.getElementById('tag-filter');
+    tagFilterElement.addEventListener('change', (event) => {
+        renderOsmMarkers(event.target.value);
+    });
 
-// Initial fetch
-fetchAbandonedPlaces();
-fetchUserPlaces();
+    // Initial data fetch
+    fetchAbandonedPlaces();
+    fetchUserPlaces();
 
-// Handle form submission
-const submissionForm = document.getElementById('submission-form');
-
-submissionForm.addEventListener('submit', function(event) {
+    // Handle form submission
+    const submissionForm = document.getElementById('submission-form');
+    submissionForm.addEventListener('submit', function(event) {
     event.preventDefault();
 
     const formData = new FormData(submissionForm);
