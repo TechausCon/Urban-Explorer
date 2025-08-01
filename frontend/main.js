@@ -107,7 +107,6 @@ function fetchUserPlaces() {
         .catch(error => console.error('Error fetching user places:', error));
 }
 
-
 function fetchAbandonedPlaces() {
     const bounds = map.getBounds();
     const bbox = `${bounds.getSouth()},${bounds.getWest()},${bounds.getNorth()},${bounds.getEast()}`;
@@ -150,25 +149,23 @@ function fetchAbandonedPlaces() {
 document.addEventListener('DOMContentLoaded', () => {
     // Populate country dropdown
     const countryFilter = document.getElementById('country-filter');
-    countries.sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
-    countries.forEach(country => {
-        const option = document.createElement('option');
-        option.value = `${country.lat},${country.lon}`;
-        option.textContent = country.name;
-        countryFilter.appendChild(option);
-    });
+    if (typeof countries !== 'undefined') {
+        countries.sort((a, b) => a.name.localeCompare(b.name));
+        countries.forEach(country => {
+            const option = document.createElement('option');
+            option.value = `${country.lat},${country.lon}`;
+            option.textContent = country.name;
+            countryFilter.appendChild(option);
+        });
 
-    // Handle country selection
-    countryFilter.addEventListener('change', (event) => {
-        const value = event.target.value;
-        if (value !== 'default') {
-            const [lat, lon] = value.split(',');
-            map.setView([lat, lon], 6); // Zoom to a reasonable level
-        }
-    });
-
-    // Fetch data when the map is moved or zoomed
-    map.on('moveend', fetchAbandonedPlaces);
+        countryFilter.addEventListener('change', (event) => {
+            const value = event.target.value;
+            if (value !== 'default') {
+                const [lat, lon] = value.split(',');
+                map.setView([lat, lon], 6);
+            }
+        });
+    }
 
     // Handle tag filter change
     const tagFilterElement = document.getElementById('tag-filter');
@@ -176,40 +173,40 @@ document.addEventListener('DOMContentLoaded', () => {
         renderOsmMarkers(event.target.value);
     });
 
-    // Initial data fetch
-    fetchAbandonedPlaces();
-    fetchUserPlaces();
-
     // Handle form submission
     const submissionForm = document.getElementById('submission-form');
     submissionForm.addEventListener('submit', function(event) {
-    event.preventDefault();
+        event.preventDefault();
 
-    const formData = new FormData(submissionForm);
-    const data = Object.fromEntries(formData.entries());
+        const formData = new FormData(submissionForm);
+        const data = Object.fromEntries(formData.entries());
 
-    // Convert lat/lon to numbers
-    data.latitude = parseFloat(data.latitude);
-    data.longitude = parseFloat(data.longitude);
-    data.danger_level = parseInt(data.danger_level, 10);
+        data.latitude = parseFloat(data.latitude);
+        data.longitude = parseFloat(data.longitude);
+        data.danger_level = parseInt(data.danger_level, 10);
 
-
-    fetch('http://localhost:3000/api/places', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-    })
-    .then(response => response.json())
-    .then(result => {
-        console.log('Success:', result);
-        alert('Place submitted successfully!');
-        submissionForm.reset();
-        fetchUserPlaces(); // Refresh user-submitted places
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error submitting place. See console for details.');
+        fetch('http://localhost:3000/api/places', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(result => {
+            console.log('Success:', result);
+            alert('Place submitted successfully!');
+            submissionForm.reset();
+            fetchUserPlaces();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error submitting place. See console for details.');
+        });
     });
+
+    // Fetch data on map move
+    map.on('moveend', fetchAbandonedPlaces);
+
+    // Initial data fetch
+    fetchAbandonedPlaces();
+    fetchUserPlaces();
 });
