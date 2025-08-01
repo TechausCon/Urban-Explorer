@@ -1,0 +1,12 @@
+{
+  "name": "lost-places-explorer-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Lost Places Explorer",
+  "main": "main.js",
+  "scripts": {
+    "start": "npx http-server ."
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}

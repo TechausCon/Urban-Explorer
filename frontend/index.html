@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost Places Explorer</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Lost Places Explorer</h1>
+
+    <div class="filter-container">
+        <label for="tag-filter">Filter by tag:</label>
+        <select id="tag-filter">
+            <option value="all">All</option>
+            <option value="industrial">Industrial</option>
+            <option value="railway">Railway</option>
+            <option value="military">Military</option>
+            <option value="hospital">Hospital</option>
+            <option value="place_of_worship">Place of Worship</option>
+        </select>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="form-container">
+        <h2>Submit a New Lost Place</h2>
+        <form id="submission-form">
+            <label for="title">Title:</label>
+            <input type="text" id="title" name="title" required>
+
+            <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" name="latitude" required>
+
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" name="longitude" required>
+
+            <label for="access-notes">Access Notes:</label>
+            <textarea id="access-notes" name="access_notes"></textarea>
+
+            <label for="danger-level">Danger Level (1-5):</label>
+            <input type="range" id="danger-level" name="danger_level" min="1" max="5" value="3">
+
+            <label for="type">Type:</label>
+            <select id="type" name="type">
+                <option value="factory">Factory</option>
+                <option value="villa">Villa</option>
+                <option value="hospital">Hospital</option>
+                <option value="church">Church</option>
+                <option value="train_station">Train Station</option>
+                <option value="other">Other</option>
+            </select>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+    <script src="main.js"></script>
+</body>
+</html>
