@@ -94,12 +94,15 @@ function fetchUserPlaces() {
             userMarkersLayer.clearLayers();
             places.forEach(place => {
                 const marker = L.marker([place.latitude, place.longitude], { icon: greenIcon });
-                const popupContent = `
+                let popupContent = `
                     <b>${place.title}</b> (User-submitted)<br>
                     Type: ${place.type}<br>
                     Danger Level: ${place.danger_level}/5<br>
                     Access: ${place.access_notes || 'N/A'}
                 `;
+                if (place.imageUrl) {
+                    popupContent += `<br><img src="http://localhost:3000${place.imageUrl}" alt="${place.title}" width="150">`;
+                }
                 marker.bindPopup(popupContent);
                 userMarkersLayer.addLayer(marker);
             });
@@ -183,21 +186,12 @@ document.addEventListener('DOMContentLoaded', () => {
     submissionForm.addEventListener('submit', function(event) {
         event.preventDefault();
 
+        // Use FormData to handle file uploads
         const formData = new FormData(submissionForm);
-        const data = Object.fromEntries(formData.entries());
-
-        // Convert lat/lon to numbers
-        data.latitude = parseFloat(data.latitude);
-        data.longitude = parseFloat(data.longitude);
-        data.danger_level = parseInt(data.danger_level, 10);
-
 
         fetch('http://localhost:3000/api/places', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
+            body: formData, // No headers needed, browser sets it automatically
         })
         .then(response => response.json())
         .then(result => {
